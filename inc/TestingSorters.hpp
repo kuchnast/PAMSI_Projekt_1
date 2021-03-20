@@ -149,26 +149,35 @@ bool TestingSorters<T>::WriteOutputData(std::string path)
 template<class T>
 bool TestingSorters<T>::TestIfSorted(SortType type) 
 {
-    bool state = true;
-    for (size_t i = 0; i < m_size && state == true; ++i)
-    {
-        for (size_t j = i + 1; j < m_size && state == true; ++j)
-        {
-            switch (type)
-            {
-            case ASC:
-                if(m_array[i] > m_array[j])
-                    state = false;
-                break;
+    int i = m_size - 1;
+    if (i <= 0)
+        return true;
 
-            case DES:
-                if(m_array[i] < m_array[j])
-                    state = false;
-                break;
-            }
+    switch (type)
+    {
+    case ASC:
+        {
+            while(i > 0)
+                if (m_array[i] < m_array[--i]) 
+                    return false;
+
+            return m_array[0] <= m_array[1];
+            break;
+        }
+        
+
+    case DES:
+        {
+            while(i > 0)
+                if (m_array[i] > m_array[--i]) 
+                    return false;
+
+            return m_array[0] >= m_array[1];
+            break;
         }
     }
-    return state;
+    
+    return true;
 }
 
 template<class T>

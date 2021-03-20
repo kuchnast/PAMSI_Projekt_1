@@ -20,9 +20,14 @@ $(APP_DIR)/$(TARGET): $(OBJECTS)
 	$(CPP) $(CPPFLAGS) -o $(APP_DIR)/$(TARGET) $^ $(LDFLAGS)
 	@ln -svf $(APP_DIR)/$(TARGET) $(TARGET)
 
+.PHONY: all build relase debug clean
+
 build:
 	@mkdir -p $(APP_DIR)
 	@mkdir -p $(OBJ_DIR)
+
+relase: CPPFLAGS += -O2
+relase: all
 
 debug: CPPFLAGS += -DDEBUG -g
 debug: all
