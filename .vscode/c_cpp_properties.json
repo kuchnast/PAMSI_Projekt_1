@@ -1,6 +1,6 @@
 {
     "env": {
-        "myDefaultIncludePath": ["${workspaceFolder}/inc/**"]
+        "myDefaultIncludePath": ["${workspaceFolder}/inc"]
     },
     "configurations": [
         {

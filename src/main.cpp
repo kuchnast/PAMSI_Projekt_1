@@ -7,47 +7,88 @@
 #include "QuickSort.hpp"
 #include "HeapSort.hpp"
 #include "IntroSort.hpp"
+#include "TestingSorters.hpp"
+#include "ProgramInterface.hpp"
 
-using std::shared_ptr;
+using std::cerr;
+using std::cin;
+using std::cout;
+using std::endl;
 
 int main(int argc, char* argv[])
 {
-    std::vector<shared_ptr<Sorter<int>>> Sorters;
-    SortType type = DES;
-
-    shared_ptr<Sorter<int>> M = std::make_shared<MergeSort<int>>(type);
-    Sorters.push_back(M);
-    
-    shared_ptr<Sorter<int>> N = std::make_shared<QuickSort<int>>(type);
-    Sorters.push_back(N);
-    
-    shared_ptr<Sorter<int>> O = std::make_shared<HeapSort<int>>(type);
-    Sorters.push_back(O);
-
-    shared_ptr<Sorter<int>> P = std::make_shared<IntroSort<int>>(type);
-    Sorters.push_back(P);
-
-    int array[4][10] = {{4, 10, 5, 2, 3, 7, 6, 9, 8, 1},
-                        {4, 10, 5, 2, 3, 7, 6, 9, 8, 1},
-                        {4, 10, 5, 2, 3, 7, 6, 9, 8, 1},
-                        {4, 10, 5, 2, 3, 7, 6, 9, 8, 1}};
-
-    int size = sizeof(*array) / sizeof(**array);
-    int l = 0;
-    int r = size - 1;
-
-    for (int i = 0; i < (int)Sorters.size(); ++i)
+    try
     {
-        Sorters[i]->sort(array[i], l, r);
+        char option;
+        TestingSorters<int> T;
 
-        std::cout << std::endl;
-        std::cout << "Po sortowaniu[" << i << "]:" << std::endl;
-        for (int j = 0; j < size; ++j)
+        ShowMenu();
+        do
         {
-            std::cout << array[i][j] << " ";
-        }
-        std::cout << std::endl;
+            cout << "Choose option: ";
+            cin >> option;
+            switch (option)
+            {
+            case '1':
+            {
+                ReadArray(T);
+                break;
+            }
+            case '2':
+            {
+                WriteArray(T);
+                break;
+            }
+            case '3':
+            {
+                GenerateArray(T);
+                break;
+            }
+            case '4':
+            {
+                ChooseSortingAlgorithm(T);
+                break;
+            }
+            case '5':
+            {
+                RunSorting(T);
+                break;
+            }
+            case '6':
+            {
+                TestIfSorted(T);
+                break;
+            }
+            case '7':
+            {
+                EfficiencyTests();
+                break;
+            }
+            case '9':
+            {
+                cout << "Exiting the program..." << endl;
+                break;
+            }
+            case '0':
+            {
+                ShowMenu();
+                break;
+            }
+            default:
+            {
+                cout << "Invalid argument." << endl;
+                break;
+            }
+            }
+        } while (option != '9');
     }
-
+     catch (const std::invalid_argument &e)
+    {
+        cerr << e.what() << "\nKończenie pracy programu." << endl;
+    }
+    catch (...)
+    {
+        cerr << "Nieznany wyjątek.\nKończenie pracy programu." << endl;
+    }
     return 0;
 }

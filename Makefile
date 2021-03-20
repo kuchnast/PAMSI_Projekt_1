@@ -1,5 +1,5 @@
 CPP      := g++
-CPPFLAGS := -Wall -pedantic -std=c++14
+CPPFLAGS := -Wall -pedantic -std=c++17
 LDFLAGS  := -L/usr/lib -lstdc++ -lm
 BUILD    := ./build
 OBJ_DIR  := $(BUILD)/objects

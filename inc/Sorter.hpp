@@ -16,15 +16,23 @@ protected:
 
 public:
     Sorter() : m_type(ASC){}
-    Sorter(SortType type) : m_type(type){}
+    explicit Sorter(SortType type) : m_type(type){}
 
     virtual void sort(T *array, int l, int r) = 0;
+
+    void SetSortType(SortType type);
+    SortType GetSortType() const;
 };
 
-void printArray(int *array, int size)
+template<class T>
+void Sorter<T>::SetSortType(SortType type) 
 {
-    for (int i = 0; i < size; ++i)
-    {
-        std::cout << array[i] << " ";
-    }
+    m_type = type;
+}
+
+
+template<class T>
+SortType Sorter<T>::GetSortType() const
+{
+    return m_type;
 }
