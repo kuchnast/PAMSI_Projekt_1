@@ -1,59 +1,94 @@
 #pragma once
 
 #include <iostream>
+
 #include "Sorter.hpp"
 
+/**
+ * @brief Sort array by MergeSort algorithm
+ * 
+ * @tparam T type of data to sort
+ */
 template <class T>
 class MergeSort : public Sorter<T>
 {
 private:
-    void m_mergeSort(T *array, int l, int r);
+    /**
+     * @brief The main function of sorting by MergeSort
+     * 
+     * @param array reference to array
+     * @param first index of first item to be sorted
+     * @param last index of last item to be sorted
+     */
+    void m_mergeSort(std::vector<T> &array, int first, int r);
 
-    void m_merge(T *array, int l, int q, int r);
+    /**
+     * @brief Merges two subarrays
+     * 
+     * @param array reverence to array
+     * @param first index of first item to be sorted
+     * @param q index of midle or midle left item
+     * @param last index of last item to be sorted
+     */
+    void m_merge(std::vector<T> &array, int first, int q, int last);
 
 public:
-    using Sorter<T>::Sorter;
-    void sort(T *array, int l, int r) override;
+    /**
+     * @brief Construct a new Merge Sort object
+     * If not specified, sort in ascending order.
+     */
+    MergeSort() : Sorter<T>() {}
+
+    /**
+     * @brief Construct a new Merge Sort object with specific order
+     * 
+     * @param order sort order (ASC or DES)
+     */
+    MergeSort(SortOrder order) : Sorter<T>(order) {}
+
+    /**
+     * @brief Sort array in specified order
+     * 
+     * @param array reverence to array
+     * @param first index of first item to be sorted
+     * @param last index of last item to be sorted
+     */
+    void Sort(std::vector<T> &array, int first, int last) override;
 };
 
 template <class T>
-void MergeSort<T>::m_mergeSort(T *array, int l, int r)
+void MergeSort<T>::m_mergeSort(std::vector<T> &array, int first, int last)
 {
-    if (l < r)
+    if (first < last)
     {
-        int q = (l + r) / 2;
+        int q = (first + last) / 2;
 
-        m_mergeSort(array, l, q);
-        m_mergeSort(array, q + 1, r);
-        m_merge(array, l, q, r);
+        m_mergeSort(array, first, q);
+        m_mergeSort(array, q + 1, last);
+        m_merge(array, first, q, last);
     }
 }
 
 template <class T>
-void MergeSort<T>::m_merge(T *array, int l, int q, int r)
+void MergeSort<T>::m_merge(std::vector<T> &array, int first, int q, int last)
 {
-    const int n = q - l + 1;
-    const int m = r - q;
-    int *temp_L = new int[n], *temp_R = new int[m];
+    const int n = q - first + 1; //number of left elements
+    const int m = last - q; //number of riht elements
+    std::vector<T> temp_L(&array[first], &array[q + 1]);
+    std::vector<T> temp_R(&array[q + 1], &array[last + 1]);
 
-    for (int i = 0; i < n; i++)
-        temp_L[i] = array[l + i];
-
-    for (int i = 0; i < m; i++)
-        temp_R[i] = array[q + 1 + i];
-
-    int i = 0, j = 0, k = l;
+    int i = 0, j = 0, k = first;
 
     do
     {
-        if (i == n)
+        if (i == n) //if all items from left vector inserted, push back the rest of right vector
         {
             do
             {
                 array[k++] = temp_R[j++];
             } while (j < m);
         }
-        else if (j == m)
+        else if (j == m) //if all items from right vector inserted, push back the rest of left vector
         {
             do
             {
@@ -62,26 +97,19 @@ void MergeSort<T>::m_merge(T *array, int l, int q, int r)
         }
         else
         {
-            switch (this->m_type)
-            {
-            case ASC:
+            if (this->m_order == ASC)
                 temp_L[i] <= temp_R[j] ? array[k++] = temp_L[i++] : array[k++] = temp_R[j++];
-                break;
-
-            case DES:
+            else
                 temp_L[i] <= temp_R[j] ? array[k++] = temp_R[j++] : array[k++] = temp_L[i++];
-                break;
-            }
         }
-    } while (k < r + 1);
-
-    delete[] temp_L;
-    delete[] temp_R;
+    } while (k <= last);
 }
 
 template <class T>
-void MergeSort<T>::sort(T *array, int l, int r)
+void MergeSort<T>::Sort(std::vector<T> &array, int first, int last)
 {
-    m_mergeSort(array, l, r);
+    if (first < 0 || last >= (int)array.size())
+        std::invalid_argument("Invalid array index value");
+    m_mergeSort(array, first, last);
 }
 

@@ -7,7 +7,7 @@
 #include "QuickSort.hpp"
 #include "HeapSort.hpp"
 #include "IntroSort.hpp"
-#include "TestingSorters.hpp"
+#include "SorterInterface.hpp"
 #include "ProgramInterface.hpp"
 
 using std::cerr;
@@ -15,12 +15,12 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     try
     {
         char option;
-        TestingSorters<int> T;
+        SorterInterface<int> T;
 
         ShowMenu();
         do
@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
             }
             case '7':
             {
-                EfficiencyTests();
+                PerformanceTests();
                 break;
             }
             case '9':
@@ -82,13 +82,17 @@ int main(int argc, char* argv[])
             }
         } while (option != '9');
     }
-     catch (const std::invalid_argument &e)
+    catch (const std::invalid_argument &e)
     {
-        cerr << e.what() << "\nKończenie pracy programu." << endl;
+        cerr << "Invalid argument exception: " << e.what() << "\nClossing program." << endl;
+    }
+    catch (const std::runtime_error &e)
+    {
+        cerr << "Runtime error exception: " << e.what() << "\nClossing program." << endl;
     }
     catch (...)
     {
-        cerr << "Nieznany wyjątek.\nKończenie pracy programu." << endl;
+        cerr << "Unknown exception.\nClossing program." << endl;
     }
     return 0;
 }
