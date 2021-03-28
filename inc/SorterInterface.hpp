@@ -359,3 +359,31 @@ uint64_t SorterInterface<T>::RunPartlySort(double percent)
 
     return duration_cast<microseconds>(stop - start).count();
 }
+
+template <class T>
+uint64_t SorterInterface<T>::RunReverseSort()
+{
+    using namespace std::chrono;
+
+    if (!m_array.size())
+        throw(std::invalid_argument("Empty array"));
+
+    if (m_current_sorter == nullptr)
+        throw(std::invalid_argument("No sort algorithm was selected"));
+
+    SortOrder temp = m_current_sorter->GetSortOrder();
+    if(temp == ASC)
+        m_current_sorter->SetSortOrder(DES);
+    else
+        m_current_sorter->SetSortOrder(ASC);
+
+    auto start = high_resolution_clock::now();
+
+    m_current_sorter->Sort(m_array, 0, m_array.size() - 1);
+
+    auto stop = high_resolution_clock::now();
+
+    m_current_sorter->SetSortOrder(temp);
+
+    return duration_cast<microseconds>(stop - start).count();
+}
