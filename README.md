@@ -1,2 +1,2 @@
 # PAMSI_Projekt_1
-Implementacja trzech algorytmów sortowania. 
+Implementacja algorytmów sortowania i testy ich efektywności dla różnych typów danych.
